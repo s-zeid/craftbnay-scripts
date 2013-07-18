@@ -1,11 +1,11 @@
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-USAGE = "/<command> [<mode>[!]|get|? [<player>]]";
-DESCRIPTION = "Gets or sets a player's game mode. "
-            + " Other players' game modes may be set"
-            + " only if the caller is an operator.";
+var USAGE = "/<command> [<mode>[!]|get|? [<player>]]";
+var DESCRIPTION = "Gets or sets a player's game mode. "
+                + " Other players' game modes may be set"
+                + " only if the caller is an operator.";
 
-SCRIPT_PDF = {
+var SCRIPT_PDF = {
  "name": "CraftBnay-GameMode",
  "version": "1.0",
  "authors": ["Scott Zeid"],
@@ -13,7 +13,7 @@ SCRIPT_PDF = {
   "gm":          {"usage": USAGE, "description": DESCRIPTION},
   "gamemode-cb": {"usage": USAGE, "description": DESCRIPTION}
  }
-}
+};
 
 //////////////////////////////////////////////////////////////////////////
 

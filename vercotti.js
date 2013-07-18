@@ -14,18 +14,18 @@ var COLOURS = {
 
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-SCRIPT_PDF = {
+var USAGE = "/<command> [-d|--dino|(-l|--luigi)|--] message";
+var DESCRIPTION = "Speak as Luigi Vercotti or Dino Vercotti (recurring"
+                + " characters from Monty Python's Flying Circus).";
+
+var SCRIPT_PDF = {
  "name": "CraftBnay-Vercotti",
  "version": "1.0",
  "authors": ["Scott Zeid"],
  "commands": {
-  "vercotti": {
-   "usage": "/<command> [-d|--dino|(-l|--luigi)|--] message",
-   "description": "Speak as Luigi Vercotti or Dino Vercotti (recurring"
-                + " characters from Monty Python's Flying Circus)."
-  }
+  "vercotti": {"usage": USAGE, "description": DESCRIPTION}
  }
-}
+};
 
 //////////////////////////////////////////////////////////////////////////
 

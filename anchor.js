@@ -6,11 +6,11 @@ var ALIASES = {
 
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-USAGE = "/<command> {ls [page]|[set] [prefix/]anchorName}";
-DESCRIPTION = "Teleports the calling player to an anchor, creates a new"
-            + " anchor, or lists the existing anchors.";
+var USAGE = "/<command> {ls [page]|[set] [prefix/]anchorName}";
+var DESCRIPTION = "Teleports the calling player to an anchor, creates a"
+                + " new anchor, or lists the existing anchors.";
 
-SCRIPT_PDF = {
+var SCRIPT_PDF = {
  "name": "CraftBnay-Anchor",
  "version": "1.0",
  "authors": ["Scott Zeid"],
@@ -18,7 +18,7 @@ SCRIPT_PDF = {
   "a":      {"usage": USAGE, "description": DESCRIPTION},
   "anchor": {"usage": USAGE, "description": DESCRIPTION}
  }
-}
+};
 
 //////////////////////////////////////////////////////////////////////////
 
