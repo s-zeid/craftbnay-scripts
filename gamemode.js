@@ -1,9 +1,5 @@
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-importClass(org.bukkit.GameMode);
-importClass(org.bukkit.entity.Player);
-importClass(java.util.logging.Level);
- 
 USAGE = "/<command> [<mode>[!]|get|? [<player>]]";
 DESCRIPTION = "Gets or sets a player's game mode. "
             + " Other players' game modes may be set"
@@ -19,6 +15,13 @@ SCRIPT_PDF = {
  }
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+importClass(java.util.logging.Level);
+
+importClass(org.bukkit.GameMode);
+importClass(org.bukkit.entity.Player);
+ 
 var SAFE_GAME_MODES = [GameMode.CREATIVE];
 
 function onEnable() {}

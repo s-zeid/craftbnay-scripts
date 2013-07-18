@@ -14,14 +14,6 @@ var COLOURS = {
 
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-importClass(java.util.Timer);
-importClass(java.util.TimerTask);
-importClass(java.util.logging.Level);
-
-importClass(org.bukkit.ChatColor);
-importClass(org.bukkit.Server);
-importClass(org.bukkit.entity.Player);
- 
 SCRIPT_PDF = {
  "name": "CraftBnay-Vercotti",
  "version": "1.0",
@@ -35,6 +27,16 @@ SCRIPT_PDF = {
  }
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+importClass(java.util.Timer);
+importClass(java.util.TimerTask);
+importClass(java.util.logging.Level);
+
+importClass(org.bukkit.ChatColor);
+importClass(org.bukkit.Server);
+importClass(org.bukkit.entity.Player);
+ 
 function onEnable() {}
 function onDisable() {}
 

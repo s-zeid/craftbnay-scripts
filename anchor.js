@@ -6,9 +6,6 @@ var ALIASES = {
 
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-importClass(org.bukkit.entity.Player);
-importClass(java.util.logging.Level);
- 
 USAGE = "/<command> {ls [page]|[set] [prefix/]anchorName}";
 DESCRIPTION = "Teleports the calling player to an anchor, creates a new"
             + " anchor, or lists the existing anchors.";
@@ -23,6 +20,12 @@ SCRIPT_PDF = {
  }
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+importClass(java.util.logging.Level);
+
+importClass(org.bukkit.entity.Player);
+ 
 function onEnable() {}
 function onDisable() {}
 
