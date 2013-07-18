@@ -19,6 +19,8 @@ SCRIPT_PDF = {
  }
 }
 
+var SAFE_GAME_MODES = [GameMode.CREATIVE];
+
 function onEnable() {}
 function onDisable() {}
 
@@ -105,7 +107,7 @@ function onCommand(sender, command, label, args) {
     sender.sendMessage(prefix + "already in " + mode.toString().toLowerCase() + " mode");
     return true;
    }
-   if (!force) {
+   if (!force && !isSafeGameMode(mode)) {
     if (player.isFlying()) {
      var prefix = (playerIsSender) ? "You are " : player.getName() + " is ";
      sender.sendMessage(prefix + "flying.  Game mode change denied");
@@ -135,6 +137,14 @@ function onCommand(sender, command, label, args) {
  }
  return false;
 };
+
+function isSafeGameMode(mode) {
+ for (var i = 0; i < SAFE_GAME_MODES.length; i++) {
+  if (SAFE_GAME_MODES[i].equals(mode))
+   return true;
+ }
+ return false;
+}
 
 function isOnGround(player) {
  if (!(player instanceof Player)) return false;
