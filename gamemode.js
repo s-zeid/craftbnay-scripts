@@ -51,12 +51,23 @@ function onCommand(sender, command, label, args) {
   }
   
   // Convert mode argument to GameMode
-  if (!mode)
+  if (!mode) {
    mode = null;
-  else if (mode.match(/^[0-9]+$/))
+  } else if (mode.match(/^[0-9]+$/)) {
+   var original = mode;
    mode = GameMode.getByValue(Number(mode));
-  else
-   mode = GameMode.valueOf(mode.toUpperCase());
+   if (mode === null) {
+    sender.sendMessage(String(original) + " is not a valid game mode");
+    return true;
+   }
+  } else {
+   try {
+    mode = GameMode.valueOf(mode.toUpperCase());
+   } catch (e if e.javaException instanceof java.lang.IllegalArgumentException) {
+    sender.sendMessage(mode.toUpperCase() + " is not a valid game mode");
+    return true;
+   }
+  }
   
   // Convert player argument to Player
   if (player) {
