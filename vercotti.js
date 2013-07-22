@@ -9,6 +9,7 @@ var COLOURS = {
  "_nether": 'c',
  "_the_end": '8'
 };
+var DEFAULT_WORLD = "Samba";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -35,6 +36,7 @@ importClass(java.util.logging.Level);
 
 importClass(org.bukkit.ChatColor);
 importClass(org.bukkit.Server);
+importClass(org.bukkit.command.BlockCommandSender);
 importClass(org.bukkit.entity.Player);
  
 function onEnable() {}
@@ -46,8 +48,10 @@ function onCommand(sender, command, label, args) {
    return false;
   
   args = arrayToString(args);
+  var message = args.slice((args[0].substr(0, 1) == "-") ? 1 : 0).join(" ");
   if (["-e", "--example"].indexOf(args[0]) > -1) {
-   vercotti(sender, "You've got a nice skin there, " + sender.getName() + "...");
+   var name = (message) ? message : sender.getName();
+   vercotti(sender, "You've got a nice skin there, " + name + "...");
    vercotti(sender, "We wouldn't want anything to §ohappen§r to it...", true);
    //new Timer().schedule(new TimerTask(function() {
    // vercotti(sender, "We wouldn't want anything to §ohappen§r to it...", true);
@@ -55,7 +59,6 @@ function onCommand(sender, command, label, args) {
   }
   else {
    var dino = (["-d", "--dino"].indexOf(args[0]) > -1);
-   var message = args.slice((args[0].substr(0, 1) == "-") ? 1 : 0).join(" ");
    vercotti(sender, message, dino);
   }
   
@@ -67,8 +70,15 @@ function onCommand(sender, command, label, args) {
 function vercotti(sender, message, dino) {
  if (typeof(dino) === "undefined") dino = false;
  
- var worldName = sender.getWorld().getName();
  var firstName = (dino) ? "Dino" : "Luigi";
+ 
+ var worldName;
+ if (sender instanceof BlockCommandSender)
+  worldName = sender.getBlock().getWorld().getName();
+ else if (sender instanceof Player)
+  worldName = sender.getWorld().getName();
+ else
+  worldName = DEFAULT_WORLD;
  
  var prefix = "";
  prefix += "[" + getColour(worldName) + getAlias(worldName) + ChatColor.RESET + "]";
