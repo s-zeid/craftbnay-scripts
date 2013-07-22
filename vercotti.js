@@ -15,7 +15,8 @@ var DEFAULT_WORLD = "Samba";
 
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-var USAGE = "/<command> [-d|--dino|(-l|--luigi)|--] message";
+var USAGE = "/<command> [-d|--dino|(-l|--luigi)|--] message\n"
+          + "/<command> -e|--example [player]";
 var DESCRIPTION = "Speak as Luigi Vercotti or Dino Vercotti (recurring"
                 + " characters from Monty Python's Flying Circus).";
 
