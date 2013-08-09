@@ -85,7 +85,7 @@ function onCommand(sender, command, label, args) {
     sender.sendMessage("Invalid command name \"" + commandName + "\".");
     return true;
    }
-  } else if (angle.match(/^[0-9]+(\.[0-9]+)?$/)) {
+  } else if (angle.match(/^[-+]?[0-9]+(\.[0-9]+)?$/)) {
    angle = new Float(angle);
    if (Math.abs(angle) == Infinity) {
     sender.sendMessage("Overflow error.");
