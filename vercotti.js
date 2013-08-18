@@ -1,7 +1,9 @@
 var ALIASES = {
  // Format:  "Original name": "Alias"
+ "Planets": "The Planets"
 };
 var COLOURS = {
+ "Planets": "DARK_BLUE",
  "Nefeli": '2',
  "Bnay": '9',
  "Samba": '6',
@@ -9,7 +11,9 @@ var COLOURS = {
  "_nether": 'c',
  "_the_end": '8'
 };
-var DEFAULT_WORLD = "Samba";
+var DEFAULT_WORLD = "The Planets";
+var CHAT_PREFIX = "&8[%world%&8]&r%chat%";
+var CHAT_FORMAT = "<%player%> %message%";
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -81,11 +85,19 @@ function vercotti(sender, message, dino) {
  else
   worldName = DEFAULT_WORLD;
  
- var prefix = "";
- prefix += "[" + getColour(worldName) + getAlias(worldName) + ChatColor.RESET + "]";
- prefix += "<" + firstName + "Vercotti> ";
+ var worldNameFormatted = getColour(worldName) + getAlias(worldName) + ChatColor.RESET;
  
- server.broadcast(prefix + message, Server.BROADCAST_CHANNEL_USERS);
+ var formatted = CHAT_PREFIX;
+ formatted = formatted.replace("%world%", function() { return worldNameFormatted; });
+ formatted = formatted.replace("%chat%", function() {
+  var formatted = CHAT_FORMAT;
+  formatted = formatted.replace("%player%", function() { return firstName + "Vercotti"; });
+  formatted = formatted.replace("%message%", function() { return message; });
+  return formatted;
+ });
+ formatted = ChatColor.translateAlternateColorCodes('&', formatted);
+ 
+ server.broadcast(formatted, Server.BROADCAST_CHANNEL_USERS);
 }
 
 function getColour(name) {
