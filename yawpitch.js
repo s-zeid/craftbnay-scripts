@@ -1,6 +1,6 @@
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-var USAGE = "/<command> <degrees>|round|? [<player>]";
+var USAGE = "/<command> <degrees>|round|~|? [<player>]";
 var DESCRIPTION = "Gets or sets a player's %s. "
                 + " Other players' %s may be set"
                 + " only if the caller is an operator.";
