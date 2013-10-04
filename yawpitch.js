@@ -1,6 +1,6 @@
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-var USAGE = "/<command> <degrees>|round|~|? [<player>]";
+var USAGE = "/<command> <degrees>|snap/s/#|round/r/~|? [<player>]";
 var DESCRIPTION = "Gets or sets a player's %s. "
                 + " Other players' %s may be set"
                 + " only if the caller is an operator.";
@@ -25,6 +25,7 @@ importClass(org.bukkit.entity.Player);
 importClass(org.bukkit.event.player.PlayerTeleportEvent);
 
 var ROUND = "round";
+var SNAP  = "snap";
 
 function onEnable() {}
 function onDisable() {}
@@ -44,8 +45,11 @@ function onCommand(sender, command, label, args) {
   if (args.length == 0) {}
   if (args.length >= 1) {
    angle = args[0];
-   if (["round", "~"].indexOf(angle.toLowerCase()) > -1) {
+   if (["round", "r", "~"].indexOf(angle.toLowerCase()) > -1) {
     angle = ROUND;
+   }
+   else if (["snap", "s", "#"].indexOf(angle.toLowerCase()) > -1) {
+    angle = SNAP;
    }
    else if (["?"].indexOf(angle.toLowerCase()) > -1) {
     angle = null;
@@ -85,6 +89,13 @@ function onCommand(sender, command, label, args) {
     sender.sendMessage("Invalid command name \"" + commandName + "\".");
     return true;
    }
+  } else if (angle == SNAP) {
+   try {
+    angle = Math.round(getAngle(commandName, player) / 45) * 45;
+   } catch (e) {
+    sender.sendMessage("Invalid command name \"" + commandName + "\".");
+    return true;
+   }
   } else if (angle.match(/^[-+]?[0-9]+(\.[0-9]+)?$/)) {
    angle = new Float(angle);
    if (Math.abs(angle) == Infinity) {
@@ -109,9 +120,9 @@ function onCommand(sender, command, label, args) {
    
    var loc = player.getLocation();
    if (commandName == "yaw")
-    loc.setYaw(angle);
+    loc.setYaw(normalizeAngle(angle));
    else if (commandName == "pitch")
-    loc.setPitch(angle);
+    loc.setPitch(normalizeAngle(angle));
    else {
     sender.sendMessage("Invalid command name \"" + commandName + "\".");
     return true;
@@ -145,6 +156,16 @@ function getAngle(type, player) {
   return loc.getPitch();
  else
   throw "Invalid angle type " + type;
+}
+
+function normalizeAngle(angle) {
+ // Avoid returning NaN
+ if (Math.abs(angle) == Infinity)
+  return angle;
+ angle = angle % 360;
+ if (angle >= 180)
+  return angle - 360;
+ return angle;
 }
 
 function arrayToString(array) {
