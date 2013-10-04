@@ -76,8 +76,8 @@ function onCommand(sender, command, label, args) {
   }
   
   // Convert angle argument to Float
-  if (!angle) {
-   angle = null;
+  if (angle == null) {
+   // do nothing
   } else if (angle == ROUND) {
    try {
     angle = Math.round(getAngle(commandName, player));
@@ -100,7 +100,7 @@ function onCommand(sender, command, label, args) {
   
   var playerIsSender = (player.getName() == sender.getName());
   
-  if (angle) {
+  if (angle != null) {
    // Set angle
    if (!playerIsSender && !sender.isOp()) {
     sender.sendMessage("You must be an operator to change other players' " + commandName);
