@@ -51,11 +51,12 @@ function onCommand(sender, command, label, args) {
    }
    
    //helper.log(Level.INFO, "World prefix: " + getPrefix(sender.getWorld().getName()));
-   var anchor = args.slice((args[0] === "set") ? 1 : 0).join(" ");
+   var anchorArg = args.slice((args[0] === "set") ? 1 : 0).join(" ");
+   var anchor = anchorArg;
    if (!anchor.match(/^([a-zA-Z]+)\//))
     anchor = getPrefix(sender.getWorld().getName()) + "/" + anchor;
    
-   if (args[0] === "set")
+   if (args[0] === "set" && anchorArg != "")
     exec(["mv", "anchor", anchor]);
    else
     exec(["mvtp", "a:" + anchor]);
