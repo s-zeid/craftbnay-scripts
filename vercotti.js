@@ -57,10 +57,11 @@ function onCommand(sender, command, label, args) {
   if (["-e", "--example"].indexOf(args[0]) > -1) {
    var name = (message) ? message : sender.getName();
    vercotti(sender, "You've got a nice skin there, " + name + "...");
-   vercotti(sender, "We wouldn't want anything to §ohappen§r to it...", true);
-   //new Timer().schedule(new TimerTask(function() {
-   // vercotti(sender, "We wouldn't want anything to §ohappen§r to it...", true);
-   //}), 2000);
+   var timer = new Timer();
+   timer.schedule(new TimerTask({run: function() {
+    vercotti(sender, "We wouldn't want anything to §ohappen§r to it...", true);
+    timer.cancel();
+   }}), 2000);
   }
   else {
    var dino = (["-d", "--dino"].indexOf(args[0]) > -1);
