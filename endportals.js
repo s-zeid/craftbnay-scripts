@@ -17,7 +17,7 @@ var SCRIPT_PDF = {
 
 importClass(java.util.logging.Level);
 
-importClass(net.minecraft.server.v1_6_R3.BlockEnderPortal);
+importClass(net.minecraft.server.v1_7_R1.BlockEnderPortal);
  
 function onEnable() {}
 function onDisable() {}
