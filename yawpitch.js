@@ -10,8 +10,8 @@ var SCRIPT_PDF = {
  "version": "1.0",
  "authors": ["Scott Zeid"],
  "commands": {
-  "yaw":   {"usage": USAGE, "description": DESCRIPTION.replace("%s", "yaw")},
-  "pitch": {"usage": USAGE, "description": DESCRIPTION.replace("%s", "pitch")}
+  "yaw":   {"usage": USAGE, "description": DESCRIPTION.replace(/%s/g, "yaw")},
+  "pitch": {"usage": USAGE, "description": DESCRIPTION.replace(/%s/g, "pitch")}
  }
 };
 
