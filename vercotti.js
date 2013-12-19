@@ -4,10 +4,11 @@ var ALIASES = {
 };
 var COLOURS = {
  "Planets": "DARK_BLUE",
+ "Andare": "DARK_RED",
  "Nefeli": '2',
  "Bnay": '9',
  "Samba": '6',
- "Run": "DARK_RED",
+ "Run": "RED",
  "_nether": 'c',
  "_the_end": '8'
 };
