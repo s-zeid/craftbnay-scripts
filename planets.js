@@ -31,9 +31,12 @@ importClass(org.bukkit.ChatColor);
 importClass(org.bukkit.Location);
 importClass(org.bukkit.Material);
 importClass(org.bukkit.Server);
+importClass(org.bukkit.entity.EnderDragon);
+importClass(org.bukkit.entity.EnderDragonPart);
 importClass(org.bukkit.entity.Player);
 importClass(org.bukkit.event.EventPriority);
 importClass(org.bukkit.event.block.BlockFromToEvent);
+importClass(org.bukkit.event.entity.EntityTeleportEvent);
 importClass(org.bukkit.event.player.PlayerTeleportEvent);
 
 var DISABLED = undefined;
@@ -85,6 +88,17 @@ function onDragonEggTeleport(e) {
  var block = e.getBlock();
  if (block.getWorld().equals(getPlanetsWorld())) {
   if (Material.DRAGON_EGG.equals(block.getType()))
+   e.setCancelled(true);
+ }
+}
+
+EVENTS ["onEnderDragonTeleport"] = [EntityTeleportEvent, EventPriority.HIGHEST];
+function onEnderDragonTeleport(e) {
+ var entity = e.getEntity();
+ if ((entity instanceof EnderDragon) || (entity instanceof EnderDragonPart)) {
+  var from = e.getFrom().getWorld();
+  var to   = e.getTo().getWorld();
+  if (!from.equals(to) && (from.equals(planets) || to.equals(planets)))
    e.setCancelled(true);
  }
 }
