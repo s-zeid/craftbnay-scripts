@@ -119,9 +119,15 @@ function getMultiverse() {
 }
 
 function getWorld(nameOrAlias) {
- var mvWorld = getMVWorld(nameOrAlias);
- if (mvWorld)
-  return mvWorld.getCBWorld();
+ var multiverse = getMultiverse();
+ if (multiverse) {
+  var dest = multiverse.getDestFactory().getDestination(nameOrAlias);
+  if (dest) {
+   var loc = dest.getLocation(null);
+   if (loc)
+    return loc.getWorld();
+  }
+ }
  return server.getWorld(fromAlias(nameOrAlias));
 }
 
