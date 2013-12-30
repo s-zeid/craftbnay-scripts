@@ -81,7 +81,7 @@ function onCommand(sender, command, label, args) {
     return true;
    }
    if (playerIsSender && !player.getAllowFlight()) {
-    sender.sendMessage("You are not allow to fly");
+    sender.sendMessage("You are not allowed to fly");
     return true;
    }
    
