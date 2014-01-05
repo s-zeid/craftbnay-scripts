@@ -1,6 +1,6 @@
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-var USAGE = "/<command> [<mode>[!]|get|? [<player>]]";
+var USAGE = "/<command> [<mode>[!]|toggle|get|? [<player>]]";
 var DESCRIPTION = "Enables or disables a player's flight mode. "
                 + " Other players' flight modes may be set"
                 + " only if the caller is an operator.";
@@ -20,6 +20,8 @@ importClass(java.util.logging.Level);
 
 importClass(org.bukkit.entity.Player);
 
+var TOGGLE = "toggle";
+
 function onEnable() {}
 function onDisable() {}
 
@@ -34,7 +36,9 @@ function onCommand(sender, command, label, args) {
   if (args.length > 2) {
    return false;
   }
-  if (args.length == 0) {}
+  if (args.length == 0) {
+   state = TOGGLE;
+  }
   if (args.length >= 1) {
    state = args[0];
    if (state == "true" || state == "1")
@@ -43,6 +47,8 @@ function onCommand(sender, command, label, args) {
     state = false;
    else if (state == "get" || state == "?")
     state = null;
+   else if (state == "toggle")
+    state = TOGGLE;
    else
     return false;
   }
@@ -85,7 +91,11 @@ function onCommand(sender, command, label, args) {
     return true;
    }
    
-   if (player.isFlying() == state) {
+   var isFlying = player.isFlying();
+   
+   if (state == "toggle")
+    state = !isFlying;
+   else if (isFlying == state) {
     var prefix = (playerIsSender) ? "You are " : player.getName() + " is ";
     sender.sendMessage(prefix + "already " + ((state) ? "flying" : "not flying"));
     return true;
