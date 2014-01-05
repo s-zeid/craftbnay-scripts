@@ -1,6 +1,6 @@
 /*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
 
-var USAGE = "/<command> [<mode>[!]|toggle|get|? [<player>]]";
+var USAGE = "/<command> [<bool>[!]|toggle|get|? [<player>]]";
 var DESCRIPTION = "Enables or disables a player's flight mode. "
                 + " Other players' flight modes may be set"
                 + " only if the caller is an operator.";
@@ -41,9 +41,9 @@ function onCommand(sender, command, label, args) {
   }
   if (args.length >= 1) {
    state = args[0];
-   if (state == "true" || state == "1")
+   if (state == "true" || state == "1" || state == "on" || state == "yes")
     state = true;
-   else if (state == "false" || state == "0")
+   else if (state == "false" || state == "0" || state == "off" || state == "no")
     state = false;
    else if (state == "get" || state == "?")
     state = null;
