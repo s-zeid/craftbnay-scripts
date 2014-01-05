@@ -101,12 +101,12 @@ function onCommand(sender, command, label, args) {
     return true;
    }
    
-   player.setFlying(state);
    if (state) {
     // If the player is on the ground and we don't do this, then they will
     // stop flying almost immediately.
-    player.teleport(player.getLocation().add(0, 0.2, 0));
+    player.teleport(player.getLocation().add(0, 2.0, 0));
    }
+   player.setFlying(state);
    if (!playerIsSender) {
     var prefix = (playerIsSender) ? "You are " : player.getName() + " is ";
     sender.sendMessage(prefix + ((state) ? "now flying" : "no longer flying"));
