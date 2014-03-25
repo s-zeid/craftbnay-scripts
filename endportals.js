@@ -6,7 +6,7 @@ var DESCRIPTION = "Enables or disables the placement of End Portals in"
 
 var SCRIPT_PDF = {
  "name": "CraftBnay-EndPortals",
- "version": "1.0-MC1.6.4",
+ "version": "1.0-MC1.7.2",
  "authors": ["Scott Zeid"],
  "commands": {
   "allow-end-portals": {"usage": USAGE, "description": DESCRIPTION}
