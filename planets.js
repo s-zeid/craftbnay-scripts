@@ -96,8 +96,9 @@ EVENTS ["onEnderDragonTeleport"] = [EntityTeleportEvent, EventPriority.HIGHEST];
 function onEnderDragonTeleport(e) {
  var entity = e.getEntity();
  if ((entity instanceof EnderDragon) || (entity instanceof EnderDragonPart)) {
-  var from = e.getFrom().getWorld();
-  var to   = e.getTo().getWorld();
+  var from    = e.getFrom().getWorld();
+  var to      = e.getTo().getWorld();
+  var planets = getPlanetsWorld();
   if (!from.equals(to) && (from.equals(planets) || to.equals(planets)))
    e.setCancelled(true);
  }
