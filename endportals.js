@@ -1,4 +1,4 @@
-/*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
+/*  Copyright (c) 2013-2014 Scott Zeid.  Released under the X11 License.  */
 
 var USAGE = "/<command> [0|1|true|false|(get|?)]";
 var DESCRIPTION = "Enables or disables the placement of End Portals in"
