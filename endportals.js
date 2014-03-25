@@ -6,7 +6,7 @@ var DESCRIPTION = "Enables or disables the placement of End Portals in"
 
 var SCRIPT_PDF = {
  "name": "CraftBnay-EndPortals",
- "version": "1.0-MC1.7.2",
+ "version": "1.0-MC1.7.5",
  "authors": ["Scott Zeid"],
  "commands": {
   "allow-end-portals": {"usage": USAGE, "description": DESCRIPTION}
@@ -17,7 +17,7 @@ var SCRIPT_PDF = {
 
 importClass(java.util.logging.Level);
 
-importClass(net.minecraft.server.v1_7_R1.BlockEnderPortal);
+importClass(net.minecraft.server.v1_7_R2.BlockEnderPortal);
  
 function onEnable() {}
 function onDisable() {}
