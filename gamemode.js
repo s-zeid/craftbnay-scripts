@@ -1,4 +1,4 @@
-/*  Copyright (c) 2013 Scott Zeid.  Released under the X11 License.  */
+/*  Copyright (c) 2013-2015 Scott Zeid.  Released under the X11 License.  */
 
 var USAGE = "/<command> [<mode>[!]|get|? [<player>]]";
 var DESCRIPTION = "Gets or sets a player's game mode. "
@@ -22,7 +22,7 @@ importClass(java.util.logging.Level);
 importClass(org.bukkit.GameMode);
 importClass(org.bukkit.entity.Player);
  
-var SAFE_GAME_MODES = [GameMode.CREATIVE];
+var SAFE_GAME_MODES = [GameMode.CREATIVE, GameMode.SPECTATOR];
 
 function onEnable() {}
 function onDisable() {}
