@@ -259,18 +259,27 @@ function Cottage(enchantmentList, flags) {
     }
    }
   },
+  baseSubtotal:     function() {
+   return this.price;
+  },
+  baseTotal:        function() {
+   return this.baseSubtotal() * (1 - this.discounts);
+  },
+  feeSubtotal:      function() {
+   return this.fees;
+  },
   feeTotal:         function() {
-   return this.fees * !this.feesWaived;
+   return this.feeSubtotal() * !this.feesWaived * (1 - this.discounts);
   },
   discountTotal:    function() {
-   return (this.price + this.feeTotal()) * this.discounts;
+   return (this.baseSubtotal() + this.feeSubtotal()) * this.discounts;
   },
   surchargeTotal:   function() {
-   return (this.price + this.feeTotal() - this.discountTotal())
+   return (this.baseTotal() + this.feeTotal())
           * (this.surcharges * !this.surchargesWaived);
   },
   subtotal:         function() {
-   return (this.price + this.feeTotal() - this.discountTotal() + this.surchargeTotal());
+   return this.baseTotal() + this.feeTotal() + this.surchargeTotal();
   },
   taxTotal:         function() { 
    return this.subtotal() * (this.taxes * !this.taxesWaived);
@@ -297,6 +306,7 @@ function Cottage(enchantmentList, flags) {
     line("    " + formatCurrency(item[1]) + " - " + item[0]);
    }
    line("    " + formatCurrency(this.feeTotal()) + " - Total fees");
+   line("    " + formatCurrency(-this.discountTotal()) + " - Total discounts");
    line("    " + formatCurrency(this.surchargeTotal()) + " - Total surcharges");
    line("    " + formatCurrency(this.subtotal()) + " - Subtotal");
    line("    " + formatCurrency(this.taxTotal()) + " - Total taxes");
