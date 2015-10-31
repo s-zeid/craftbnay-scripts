@@ -94,10 +94,10 @@ PRICE_MODIFIERS = [
   function(i) { i.fees += 655360000000000 * i.levels; }],
  ["MSFT employees + board:  95% OFF!",
   "--msft",
-  function(i) { i.discount += 0.95; }],
+  function(i) { i.discounts += 0.95; }],
  ["Satya Nadella: ALL FEES WAIVED!!!",
   "--satya-nadella",
-  function(i) { i.feesWaived = true; i.add("msft"); }],
+  function(i) { i.add("msft"); i.feesWaived = true; }],
  // Surcharges
  ["5% surcharge per enchantment",
   "surcharge",
@@ -246,7 +246,7 @@ function main(argv, stdout, stderr) {
  var usage = USAGE.replace(/^\/<command>/i, "");
  usage = argv[0] + usage;
  
- args = argv.slice(1);
+ var args = argv.slice(1);
  
  if (args.length < 1) {
   !IS_BUKKIT && stderr(usage);
@@ -306,6 +306,7 @@ function Cottage(enchantmentList, flags) {
  }
  
  var added = [];
+ var previousTotal = 0;
  
  var info = {
   enchantments:     enchantments,
@@ -314,7 +315,7 @@ function Cottage(enchantmentList, flags) {
   price:            price,
   fees:             0,
   feesWaived:       false,
-  discount:         0,
+  discounts:        0,
   surcharges:       0,
   surchargesWaived: false,
   taxes:            0,
@@ -338,6 +339,7 @@ function Cottage(enchantmentList, flags) {
    }
    
    var modifier = null;
+   var manual = false;
    if (typeof(what) != "string") {
     modifier = Modifier(what);
     what = modifier.key;
@@ -348,32 +350,37 @@ function Cottage(enchantmentList, flags) {
       var test = Modifier(PRICE_MODIFIERS[i]);
       if (test.key == what) {
        modifier = test;
-       return;
+       manual = true;
+       break;
       }
      }
     }
    }
    
    if (added.indexOf(what) < 0) {
-    if (!modifier.flag || flags[modifier.key]) {
+    if (!modifier.flag || flags[modifier.key] || manual) {
      var self = this;
-     var oldTotal = this.total();
-     modifier.modify(self, flags[what]);
-     var cost = this.total() - oldTotal;
+     modifier.modify(self, (!manual) ? flags[what] : n);
+     var cost = this.total() - previousTotal;
      if (cost != 0)
       this.itemized.push([modifier.description, cost]);
      added.push(what);
+     previousTotal = this.total();
     }
    }
   },
   feeTotal:         function() {
    return this.fees * !this.feesWaived;
   },
+  discountTotal:    function() {
+   return (this.price + this.feeTotal()) * this.discounts;
+  },
   surchargeTotal:   function() {
-   return (this.price + this.feeTotal()) * (this.surcharges * !this.surchargesWaived);
+   return (this.price + this.feeTotal() - this.discountTotal())
+          * (this.surcharges * !this.surchargesWaived);
   },
   subtotal:         function() {
-   return (this.price + this.feeTotal() + this.surchargeTotal());
+   return (this.price + this.feeTotal() - this.discountTotal() + this.surchargeTotal());
   },
   taxTotal:         function() { 
    return this.subtotal() * (this.taxes * !this.taxesWaived);
@@ -430,7 +437,6 @@ function Cottage(enchantmentList, flags) {
 function formatCurrency(amount, symbol) {
  if (typeof(symbol) == "undefined") symbol = "$";
 
- var o = amount;
  if (String(amount).match("e+")) {
   var real = "";
   var exp = Number(String(amount).replace(/^[^+]*\+/, ""));
