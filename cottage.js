@@ -102,6 +102,13 @@ PRICE_MODIFIERS = [
  ["5% surcharge per enchantment",
   "surcharge",
   function(i) { i.surcharges += .05 * i.enchantments; }],
+ // Taxes
+ ["8.25% sales tax",
+  "sales-tax",
+  function(i) { i.taxes += 0.0825; }],
+ ["Tax exempt",
+  "--tax-exempt",
+  function(i) { i.taxesWaived = true; }]
 ];
 
 //////////////////////////////////////////////////////////////////////////
@@ -310,6 +317,8 @@ function Cottage(enchantmentList, flags) {
   discount:         0,
   surcharges:       0,
   surchargesWaived: false,
+  taxes:            0,
+  taxesWaived:      false,
   itemized:         [],
   add:              function(what, n) {
    function Modifier(o) {
@@ -357,12 +366,20 @@ function Cottage(enchantmentList, flags) {
     }
    }
   },
-  feeTotal:         function() { return this.fees * !this.feesWaived },
+  feeTotal:         function() {
+   return this.fees * !this.feesWaived;
+  },
   surchargeTotal:   function() {
-   return (this.price + this.feeTotal()) * (this.surcharges * !this.surchargesWaived)
+   return (this.price + this.feeTotal()) * (this.surcharges * !this.surchargesWaived);
+  },
+  subtotal:         function() {
+   return (this.price + this.feeTotal() + this.surchargeTotal());
+  },
+  taxTotal:         function() { 
+   return this.subtotal() * (this.taxes * !this.taxesWaived);
   },
   total:            function() {
-   return (this.price + this.feeTotal() + this.surchargeTotal());
+   return this.subtotal() + this.taxTotal();
   },
   receipt:          function() {
    var result = [];
@@ -384,6 +401,8 @@ function Cottage(enchantmentList, flags) {
    }
    line("    " + formatCurrency(this.feeTotal()) + " - Total fees");
    line("    " + formatCurrency(this.surchargeTotal()) + " - Total surcharges");
+   line("    " + formatCurrency(this.subtotal()) + " - Subtotal");
+   line("    " + formatCurrency(this.taxTotal()) + " - Total taxes");
    line("    " + formatCurrency(this.total()) + " - Grand Total");
    line("Thank you for shopping at " + VENUE + ".");
    return result;
@@ -438,7 +457,7 @@ function formatCurrency(amount, symbol) {
  ret += whole;
  ret += ".";
  ret += (String(Math.round(Number("." + decimal) * 10)).split(".")[0] + "00").slice(0, 2);
- return ret;
+ return ret.replace("-,", "-");
 }
 
 function Flags(flags) {
