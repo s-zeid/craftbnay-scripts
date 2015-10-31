@@ -117,119 +117,11 @@ IS_BUKKIT = (typeof(importClass) == "function" &&
              typeof(org) == "object" && org.bukkit);
 IS_NODE   = (typeof(process) == "object" && process.argv);
 
-if (IS_BUKKIT) {
- importClass(org.bukkit.ChatColor);
- importClass(org.bukkit.Material);
- importClass(org.bukkit.Server);
- importClass(org.bukkit.entity.Player);
-}
-
 SYSTEM_FLAGS = ["verbose"];
 
-function getFlags() {
- var flags = [];
- for (var i = 0; i < SYSTEM_FLAGS.length; i++)
-  flags.push(SYSTEM_FLAGS[i]);
- for (var i = 0; i < PRICE_MODIFIERS.length; i++) {
-  var key = PRICE_MODIFIERS[i][1];
-  if (typeof(key) == "string" && key.match(/^--?/))
-   flags.push(PRICE_MODIFIERS[i][1].replace(/^--?/, ""));
- }
- return flags;
-};
 
-MINECART_TYPES = [];
-if (IS_BUKKIT) {
- var materials = arrayToString(Material.values());
- for (var i = 0; i < materials.length; i++) {
-  var name = materials[i];
-  if (name.match(/(^|_)MINECART$/i))
-   MINECART_TYPES.push(name);
- }
-}
+/* Start portable code (plus the stuff above) */
 
-function onEnable() {}
-function onDisable() {}
-
-function onCommand(sender, command, label, args) {
- if (command.getName().toLowerCase() == "cottage") {
-  if (args.length < 1)
-   return false;
-  
-  args = arrayToString(args);
-  
-  var playerName = null;
-  var player = sender;
-  if (args[0].match(/^@/)) {
-   if (args.length < 2)
-    return false;
-   playerName = args[0].replace(/^@/, "");
-   if (playerName.length > 0) {
-    player = getPlayer(playerName, sender);
-    if (player == null)
-     return true;
-    playerName = player.getName();
-    if (playerName == sender.getName())
-     playerName = null;
-   }
-   if (playerName == null)
-    args = args.slice(1);
-   else
-    args[1] = "@" + playerName;
-  }
-  
-  var minecarts = countMinecarts(player);
-  if (minecarts > 0) {
-   var argN = (args[0].match(/^@/)) ? 1 : 0;
-   args.splice(argN, 0, "--minecarts=" + String(minecarts));
-  }
-  
-  var r = main(["cottage"].concat(args), function(s) { sender.sendMessage(s); });
-  return r == 0;
- }
- return false;
-}
-
-function getPlayer(player, caller) {
- if (!IS_BUKKIT) return null;
- var name = player;
- var offlinePlayer = server.getOfflinePlayer(player);
- player = offlinePlayer.getPlayer();
- if (!player) {
-  if (caller) {
-   if (!offlinePlayer.hasPlayedBefore())
-    caller.sendMessage("The player " + name + " does not exist");
-   else
-    caller.sendMessage("The player " + name + " is offline");
-  }
-  return null;
- }
- return player;
-}
-
-function countMinecarts(player) {
- if (!IS_BUKKIT) return null;
- var minecarts = 0;
- if (player instanceof Player) {
-  for (var i = 0; i < MINECART_TYPES.length; i++) {
-   try {
-    var type = Material.valueOf(MINECART_TYPES[i]);
-   } catch (e) {
-    if (e.javaException instanceof java.lang.IllegalArgumentException)
-     continue;
-    else
-     throw e;
-   }
-   var stacks = player.getInventory().all(type).values().toArray();
-   for (var j = 0; j < stacks.length; j++) {
-    minecarts += stacks[j].getAmount();
-   }
-  }
- }
- return minecarts;
-}
-
-/* Start portable code (plus FLAGS constant above) */
 function main(argv, stdout, stderr) {
  if (typeof(argv) == "undefined")
   argv = new Array();
@@ -464,6 +356,18 @@ function formatCurrency(amount, symbol) {
  return ret.replace("-,", "-");
 }
 
+function getFlags() {
+ var flags = [];
+ for (var i = 0; i < SYSTEM_FLAGS.length; i++)
+  flags.push(SYSTEM_FLAGS[i]);
+ for (var i = 0; i < PRICE_MODIFIERS.length; i++) {
+  var key = PRICE_MODIFIERS[i][1];
+  if (typeof(key) == "string" && key.match(/^--?/))
+   flags.push(PRICE_MODIFIERS[i][1].replace(/^--?/, ""));
+ }
+ return flags;
+};
+
 function Flags(flags) {
  if (flags instanceof Flags)
   return flags;
@@ -548,7 +452,114 @@ function arrayToString(array) {
   result.push(String(array[i]));
  return result;
 }
+
 /* End portable code */
+
+
+/* Start Bukkit-specific code */
+
+if (IS_BUKKIT) {
+ importClass(org.bukkit.ChatColor);
+ importClass(org.bukkit.Material);
+ importClass(org.bukkit.Server);
+ importClass(org.bukkit.entity.Player);
+}
+
+MINECART_TYPES = [];
+if (IS_BUKKIT) {
+ var materials = arrayToString(Material.values());
+ for (var i = 0; i < materials.length; i++) {
+  var name = materials[i];
+  if (name.match(/(^|_)MINECART$/i))
+   MINECART_TYPES.push(name);
+ }
+}
+
+function onEnable() {}
+function onDisable() {}
+
+function onCommand(sender, command, label, args) {
+ if (command.getName().toLowerCase() == "cottage") {
+  if (args.length < 1)
+   return false;
+  
+  args = arrayToString(args);
+  
+  var playerName = null;
+  var player = sender;
+  if (args[0].match(/^@/)) {
+   if (args.length < 2)
+    return false;
+   playerName = args[0].replace(/^@/, "");
+   if (playerName.length > 0) {
+    player = getPlayer(playerName, sender);
+    if (player == null)
+     return true;
+    playerName = player.getName();
+    if (playerName == sender.getName())
+     playerName = null;
+   }
+   if (playerName == null)
+    args = args.slice(1);
+   else
+    args[1] = "@" + playerName;
+  }
+  
+  var minecarts = countMinecarts(player);
+  if (minecarts > 0) {
+   var argN = (args[0].match(/^@/)) ? 1 : 0;
+   args.splice(argN, 0, "--minecarts=" + String(minecarts));
+  }
+  
+  var r = main(["cottage"].concat(args), function(s) { sender.sendMessage(s); });
+  return r == 0;
+ }
+ return false;
+}
+
+function getPlayer(player, caller) {
+ if (!IS_BUKKIT) return null;
+ var name = player;
+ var offlinePlayer = server.getOfflinePlayer(player);
+ player = offlinePlayer.getPlayer();
+ if (!player) {
+  if (caller) {
+   if (!offlinePlayer.hasPlayedBefore())
+    caller.sendMessage("The player " + name + " does not exist");
+   else
+    caller.sendMessage("The player " + name + " is offline");
+  }
+  return null;
+ }
+ return player;
+}
+
+function countMinecarts(player) {
+ if (!IS_BUKKIT) return null;
+ var minecarts = 0;
+ if (player instanceof Player) {
+  for (var i = 0; i < MINECART_TYPES.length; i++) {
+   try {
+    var type = Material.valueOf(MINECART_TYPES[i]);
+   } catch (e) {
+    if (e.javaException instanceof java.lang.IllegalArgumentException)
+     continue;
+    else
+     throw e;
+   }
+   var stacks = player.getInventory().all(type).values().toArray();
+   for (var j = 0; j < stacks.length; j++) {
+    minecarts += stacks[j].getAmount();
+   }
+  }
+ }
+ return minecarts;
+}
+
+/* End Bukkit-specific code */
+
+
+/* Start Node.js-specific code */
 
 if (IS_NODE) {
  function print(to, what, newline) {
@@ -561,3 +572,5 @@ if (IS_NODE) {
  var r = main(argv, stdout, stderr);
  process.exit(r);
 }
+
+/* End Node.js-specific code */
