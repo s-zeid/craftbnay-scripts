@@ -161,15 +161,13 @@ function onCommand(sender, command, label, args) {
   var playerName = null;
   var player = sender;
   if (args[0].match(/^@/)) {
-   if (args.length < 2) {
-    !IS_BUKKIT && stderr(USAGE);
-    return 2;
-   }
+   if (args.length < 2)
+    return false;
    playerName = args[0].replace(/^@/, "");
-   if (IS_BUKKIT && playerName.length > 0) {
+   if (playerName.length > 0) {
     player = getPlayer(playerName, sender);
     if (player == null)
-     return 0;
+     return true;
     playerName = player.getName();
     if (playerName == sender.getName())
      playerName = null;
