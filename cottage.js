@@ -1,7 +1,7 @@
 /*  Copyright (c) 2013-2015 Scott Zeid.  Released under the X11 License.  */
 
-var USAGE = "/<command> [@[<player>]] {<enchantment level>[,...] [--verbose] [<flag> [...]]}|flags"
-var DESCRIPTION = "Get the price for an enchantment from the Enchanted"
+var USAGE = "/<command> [@[<player>]] {<enchantment level>[,...]|--verbose|[--]<flag> [...]}|flags";
+var DESCRIPTION = "Get the price for an enchantment from The Enchanted"
                 + " Cottage.";
 
 var SCRIPT_PDF = {
@@ -160,7 +160,20 @@ function main(argv, stdout, stderr) {
   stdout("Flags:  " + getFlags().join(", "));
   return 0;
  } else {
-  var cottage = new Cottage(args[0], args.slice(1));
+  var enchantmentString = "";
+  var flagList = [];
+  for (var i = 0; i < args.length; i++) {
+   if (args[i].match(/^[0-9,]+$/))
+    enchantmentString += "," + args[i];
+   else
+    flagList.push(args[i]);
+  }
+  enchantmentString = enchantmentString.replace(/^,+/, "");
+  enchantmentString = enchantmentString.replace(/,,+/g, "");
+  enchantmentString = enchantmentString.replace(/,+$/, "");
+  if (!enchantmentString)
+   enchantmentString = "0";
+  var cottage = new Cottage(enchantmentString, flagList);
   var verbose = cottage.flags.verbose;
   if (cottage.flags.verbose) {
    var receipt = cottage.receipt();
