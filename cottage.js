@@ -16,7 +16,7 @@ var SCRIPT_PDF = {
 //////////////////////////////////////////////////////////////////////////
 
 VENUE = "The Enchanted Cottage";
-SLOGAN = "Doing Satya's bidding since before he was CEO.";
+SLOGAN = "Doing Satya's bidding since before He was CEO.";
 
 PRICE_MODIFIERS = [
  ["$1 per level per enchantment",
@@ -106,6 +106,9 @@ PRICE_MODIFIERS = [
  ["8.25% sales tax",
   "sales-tax",
   function(i) { i.taxes += 0.0825; }],
+ ["5% Bnayland Enchantment Tax (BET)",
+  "bet",
+  function(i) { i.taxes += 0.05; }],
  ["Tax exempt",
   "--tax-exempt",
   function(i) { i.taxesWaived = true; }]
@@ -311,7 +314,7 @@ function Cottage(enchantmentList, flags) {
    line("    " + formatCurrency(this.subtotal()) + " - Subtotal");
    line("    " + formatCurrency(this.taxTotal()) + " - Total taxes");
    line("    " + formatCurrency(this.total()) + " - Grand Total");
-   line("Thank you for shopping at " + VENUE + ".");
+   line("Thank you for cheerfully choosing " + VENUE + "!");
    return result;
   },
   summary:          function() {
