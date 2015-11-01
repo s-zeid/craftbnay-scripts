@@ -525,9 +525,7 @@ function onCommand(sender, command, label, args) {
     if (playerName == sender.getName())
      playerName = null;
    }
-   if (playerName == null)
-    args = args.slice(1);
-   else
+   if (playerName)
     args[1] = "@" + playerName;
   }
   
