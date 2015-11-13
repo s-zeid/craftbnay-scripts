@@ -325,6 +325,14 @@ function Cottage(enchantmentList, flags) {
   receipt:            function() {
    var result = [];
    function line(s) { result.push(s); }
+   function iline(s) {
+    // indented line
+    if (s.substr(0, 1) == "-")
+     s = "   " + s;
+    else
+     s = "    " + s;
+    line(s);
+   }
    VENUE && line(VENUE.toUpperCase());
    SLOGAN && line("    " + SLOGAN);
    var nLine = "";
@@ -338,14 +346,14 @@ function Cottage(enchantmentList, flags) {
    var items = this.itemized;
    for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    line("    " + formatCurrency(item[1]) + " - " + item[0]);
+    iline(formatCurrency(item[1]) + " - " + item[0]);
    }
-   line("    " + formatCurrency(this.feeTotal()) + " - Total fees");
-   line("    " + formatCurrency(-this.concessionTotal()) + " - Total concessions");
-   line("    " + formatCurrency(this.surchargeTotal()) + " - Total surcharges");
-   line("    " + formatCurrency(this.subtotal()) + " - Subtotal");
-   line("    " + formatCurrency(this.taxTotal()) + " - Total taxes");
-   line("    " + formatCurrency(this.total()) + " - Grand Total");
+   iline(formatCurrency(this.feeTotal()) + " - Total fees");
+   iline(formatCurrency(-this.concessionTotal()) + " - Total concessions");
+   iline(formatCurrency(this.surchargeTotal()) + " - Total surcharges");
+   iline(formatCurrency(this.subtotal()) + " - Subtotal");
+   iline(formatCurrency(this.taxTotal()) + " - Total taxes");
+   iline(formatCurrency(this.total()) + " - Grand Total");
    line("Thank you for cheerfully choosing " + VENUE + "!");
    return result;
   },
@@ -589,7 +597,11 @@ function onCommand(sender, command, label, args) {
    args.splice(argN, 0, "--minecarts=" + String(minecarts));
   }
   
-  var r = main(["cottage"].concat(args), function(s) { sender.sendMessage(s); });
+  var r = main(["cottage"].concat(args), function(s) {
+   if (s.substr(0, 4) == "   -")
+    s = "   –" + s.substr(4);
+   sender.sendMessage(s);
+  });
   return r == 0;
  }
  return false;
