@@ -100,8 +100,11 @@ PRICE_MODIFIERS = [
   function(i) { i.add("msft"); i.feesWaived = true; }],
  // Surcharges
  ["5% surcharge per enchantment",
-  "surcharge",
+  "enchantment-surcharge",
   function(i) { i.surcharges += .05 * i.enchantments; }],
+ ["Effective Friday, November 13, 2015:  6.66% per level surcharge",
+  "level-surcharge",
+  function(i) { i.surcharges += .0666 * i.levels; }],
  // Taxes
  ["8.25% sales tax",
   "sales-tax",
