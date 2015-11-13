@@ -99,6 +99,9 @@ PRICE_MODIFIERS = [
  ["Satya Nadella: ALL FEES WAIVED!!!",
   "--satya-nadella",
   function(i) { i.add("msft"); i.feesWaived = true; }],
+ ["1¢ off if you can read this sign",
+  "--can-read-hidden-sign",
+  function(i) { i.concessions += 0.01; }],
  // Surcharges
  ["5% surcharge per enchantment",
   "enchantment-surcharge",
