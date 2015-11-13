@@ -369,6 +369,15 @@ function Cottage(enchantmentList, flags) {
 function formatCurrency(amount, symbol) {
  if (typeof(symbol) == "undefined") symbol = "$";
 
+ var decimalPlaces = 2;
+
+ var negative = false;
+ if (amount < 0) {
+  negative = true;
+  amount = Math.abs(amount);
+ }
+ 
+ // handle numbers whose absolute value is >= 1e21
  if (String(amount).match("e+")) {
   var real = "";
   var exp = Number(String(amount).replace(/^[^+]*\+/, ""));
@@ -382,20 +391,46 @@ function formatCurrency(amount, symbol) {
  }
  
  var ret = "";
+ // split into parts
  var parts = (String(amount) + ".0").split(".").slice(0,2);
- var whole = parts[0].split("");
- var decimal = parts[1];
+ var whole = Number(parts[0]);
+ var decimal = amount - Math.floor(amount);
  
+ // round decimal to appropriate number of places
+ var decMul = Math.pow(10, decimalPlaces);
+ decimal = Number(decimal) * decMul;
+ var decimalAfter = String(decimal - Math.floor(decimal));
+ decimal = Math.round(decimal) / decMul;
+ // handle floating point error after needed number of places
+ var origPlace = Math.floor(decimalAfter * 10);
+ if (Math.round(decimalAfter * 10) >= 5 && origPlace < 5)
+  decimal += 0.01;
+ // handle rounding to next whole number
+ if (decimal >= 1) {
+  whole += Math.floor(decimal);
+  decimal -= Math.floor(decimal);
+ }
+ // format decimal string (without leading dot)
+ decimal = String(decimal).replace(/^0*\./, "");
+ for (var i = 0; i < decimalPlaces; i++)
+  decimal += "0";
+ decimal = decimal.slice(0, decimalPlaces);
+ 
+ // add thousands separators
+ whole = String(whole).split("");
  for (var i = parts[0].length; i > 3; i -= 3) {
   whole.splice(i - 3, 0, ",");
  }
  whole = whole.join("");
  
- ret += symbol;
+ // prepare result
  ret += whole;
  ret += ".";
- ret += (String(Math.round(Number("." + decimal) * 10)).split(".")[0] + "00").slice(0, 2);
- return ret.replace("-,", "-");
+ ret += decimal;
+ ret = symbol + ret;
+ if (negative)
+  ret = "-" + ret;
+ return ret;
 }
 
 function getFlags() {
