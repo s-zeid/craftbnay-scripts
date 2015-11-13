@@ -92,6 +92,7 @@ PRICE_MODIFIERS = [
  ["Arch: $655.36tn/level/minute",
   "--arch",
   function(i) { i.add("gnu-plus-linux"); i.fees += 655360000000000 * i.levels; }],
+ // Concessions
  ["MSFT employees + board:  95% OFF!",
   "--msft",
   function(i) { i.percentConcessions += 95; }],
