@@ -94,7 +94,7 @@ PRICE_MODIFIERS = [
   function(i) { i.add("gnu-plus-linux"); i.fees += 655360000000000 * i.levels; }],
  ["MSFT employees + board:  95% OFF!",
   "--msft",
-  function(i) { i.discounts += 0.95; }],
+  function(i) { i.concessions += 0.95; }],
  ["Satya Nadella: ALL FEES WAIVED!!!",
   "--satya-nadella",
   function(i) { i.add("msft"); i.feesWaived = true; }],
@@ -224,7 +224,7 @@ function Cottage(enchantmentList, flags) {
   price:            price,
   fees:             0,
   feesWaived:       false,
-  discounts:        0,
+  concessions:      0,
   surcharges:       0,
   surchargesWaived: false,
   taxes:            0,
@@ -282,16 +282,16 @@ function Cottage(enchantmentList, flags) {
    return this.price;
   },
   baseTotal:        function() {
-   return this.baseSubtotal() * (1 - this.discounts);
+   return this.baseSubtotal() * (1 - this.concessions);
   },
   feeSubtotal:      function() {
    return this.fees;
   },
   feeTotal:         function() {
-   return this.feeSubtotal() * !this.feesWaived * (1 - this.discounts);
+   return this.feeSubtotal() * !this.feesWaived * (1 - this.concessions);
   },
-  discountTotal:    function() {
-   return (this.baseSubtotal() + this.feeSubtotal()) * this.discounts;
+  concessionTotal:  function() {
+   return (this.baseSubtotal() + this.feeSubtotal()) * this.concessions;
   },
   surchargeTotal:   function() {
    return (this.baseTotal() + this.feeTotal())
@@ -325,7 +325,7 @@ function Cottage(enchantmentList, flags) {
     line("    " + formatCurrency(item[1]) + " - " + item[0]);
    }
    line("    " + formatCurrency(this.feeTotal()) + " - Total fees");
-   line("    " + formatCurrency(-this.discountTotal()) + " - Total discounts");
+   line("    " + formatCurrency(-this.concessionTotal()) + " - Total concessions");
    line("    " + formatCurrency(this.surchargeTotal()) + " - Total surcharges");
    line("    " + formatCurrency(this.subtotal()) + " - Subtotal");
    line("    " + formatCurrency(this.taxTotal()) + " - Total taxes");
