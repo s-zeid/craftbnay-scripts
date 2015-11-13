@@ -94,17 +94,17 @@ PRICE_MODIFIERS = [
   function(i) { i.add("gnu-plus-linux"); i.fees += 655360000000000 * i.levels; }],
  ["MSFT employees + board:  95% OFF!",
   "--msft",
-  function(i) { i.concessions += 0.95; }],
+  function(i) { i.percentConcessions += 95; }],
  ["Satya Nadella: ALL FEES WAIVED!!!",
   "--satya-nadella",
   function(i) { i.add("msft"); i.feesWaived = true; }],
  // Surcharges
  ["5% surcharge per enchantment",
   "enchantment-surcharge",
-  function(i) { i.surcharges += .05 * i.enchantments; }],
+  function(i) { i.percentSurcharges += 5 * i.enchantments; }],
  ["Effective Friday, November 13, 2015:  6.66% per level surcharge",
   "level-surcharge",
-  function(i) { i.surcharges += .0666 * i.levels; }],
+  function(i) { i.percentSurcharges += 6.66 * i.levels; }],
  // Taxes
  ["8.25% sales tax",
   "sales-tax",
@@ -218,19 +218,22 @@ function Cottage(enchantmentList, flags) {
  var previousTotal = 0;
  
  var info = {
-  enchantments:     enchantments,
-  levels:           levels,
-  flags:            flags,
-  price:            price,
-  fees:             0,
-  feesWaived:       false,
-  concessions:      0,
-  surcharges:       0,
-  surchargesWaived: false,
-  taxes:            0,
-  taxesWaived:      false,
-  itemized:         [],
-  add:              function(what, n) {
+  enchantments:       enchantments,
+  levels:             levels,
+  flags:              flags,
+  price:              price,
+  fees:               0,
+  percentFees:        0,
+  feesWaived:         false,
+  concessions:        0,
+  percentConcessions: 0,
+  surcharges:         0,
+  percentSurcharges:  0,
+  surchargesWaived:   false,
+  taxes:              0,
+  taxesWaived:        false,
+  itemized:           [],
+  add:                function(what, n) {
    function Modifier(o) {
     var result = {};
     result.array = o;
@@ -278,35 +281,44 @@ function Cottage(enchantmentList, flags) {
     }
    }
   },
-  baseSubtotal:     function() {
+  baseSubtotal:       function() {
    return this.price;
   },
-  baseTotal:        function() {
-   return this.baseSubtotal() * (1 - this.concessions);
+  baseTotal:          function() {
+   return this.baseSubtotal();
   },
-  feeSubtotal:      function() {
-   return this.fees;
+  feeSubtotal:        function() {
+   return this.fees
+          + this.baseTotal()
+	    * (this.percentFees / 100);
   },
-  feeTotal:         function() {
-   return this.feeSubtotal() * !this.feesWaived * (1 - this.concessions);
+  feeTotal:           function() {
+   return this.feeSubtotal() * !this.feesWaived;
   },
-  concessionTotal:  function() {
-   return (this.baseSubtotal() + this.feeSubtotal()) * this.concessions;
+  concessionTotal:    function() {
+   return this.concessions
+          + (this.baseTotal() + this.feeTotal())
+	    * (this.percentConcessions / 100);
   },
-  surchargeTotal:   function() {
-   return (this.baseTotal() + this.feeTotal())
-          * (this.surcharges * !this.surchargesWaived);
+  surchargeSubtotal:  function() {
+   return this.surcharges
+          + (this.baseTotal() + this.feeTotal() - this.concessionTotal())
+	    * (this.percentSurcharges / 100);
   },
-  subtotal:         function() {
-   return this.baseTotal() + this.feeTotal() + this.surchargeTotal();
+  surchargeTotal:     function() {
+   return this.surchargeSubtotal() * !this.surchargesWaived;
   },
-  taxTotal:         function() { 
+  subtotal:           function() {
+   return this.baseTotal() + this.feeTotal() - this.concessionTotal()
+          + this.surchargeTotal();
+  },
+  taxTotal:           function() {
    return this.subtotal() * (this.taxes * !this.taxesWaived);
   },
-  total:            function() {
+  total:              function() {
    return this.subtotal() + this.taxTotal();
   },
-  receipt:          function() {
+  receipt:            function() {
    var result = [];
    function line(s) { result.push(s); }
    VENUE && line(VENUE.toUpperCase());
@@ -333,7 +345,7 @@ function Cottage(enchantmentList, flags) {
    line("Thank you for cheerfully choosing " + VENUE + "!");
    return result;
   },
-  summary:          function() {
+  summary:            function() {
    var result = "";
    result += this.enchantments + " enchantment";
    if (this.enchantments != 1) result += "s";
