@@ -1,4 +1,4 @@
-/*  Copyright (c) 2013-2015 Scott Zeid.  Released under the X11 License.  */
+/*  Copyright (c) 2013-2016 Scott Zeid.  Released under the X11 License.  */
 
 var USAGE = "/<command> [@[<player>]] {<enchantment level>[,...]|--verbose|[--]<flag> [...]}|flags";
 var DESCRIPTION = "Get the price for an enchantment from The Enchanted"
@@ -598,6 +598,7 @@ function onCommand(sender, command, label, args) {
   }
   
   var r = main(["cottage"].concat(args), function(s) {
+   s = String(s);
    if (s.substr(0, 4) == "   -")
     s = "   –" + s.substr(4);
    sender.sendMessage(s);
