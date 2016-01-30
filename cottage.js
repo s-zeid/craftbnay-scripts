@@ -231,6 +231,7 @@ function Cottage(enchantmentList, flags) {
   feesWaived:         false,
   concessions:        0,
   percentConcessions: 0,
+  concessionsDisplay: 0,
   surcharges:         0,
   percentSurcharges:  0,
   surchargesWaived:   false,
@@ -280,6 +281,8 @@ function Cottage(enchantmentList, flags) {
      var cost = this.total() - previousTotal;
      if (cost != 0)
       this.itemized.push([modifier.description, cost]);
+     if (cost < 0)
+      this.concessionsDisplay += -cost;
      added.push(what);
      previousTotal = this.total();
     }
@@ -349,7 +352,7 @@ function Cottage(enchantmentList, flags) {
     iline(formatCurrency(item[1]) + " - " + item[0]);
    }
    iline(formatCurrency(this.feeTotal()) + " - Total fees");
-   iline(formatCurrency(-this.concessionTotal()) + " - Total concessions");
+   iline(formatCurrency(-this.concessionsDisplay) + " - Total concessions");
    iline(formatCurrency(this.surchargeTotal()) + " - Total surcharges");
    iline(formatCurrency(this.subtotal()) + " - Subtotal");
    iline(formatCurrency(this.taxTotal()) + " - Total taxes");
