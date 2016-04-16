@@ -178,7 +178,7 @@ function onCommand(sender, command, label, args) {
   
   if (multiplier != null) {
    // Set multiplier
-   if (senderIsPlayer && !sender.isOp() && !nested) {
+   if (senderIsPlayer && !sendTo.isOp()) {
     sendTo.sendMessage("You must be an operator to change minecarts' speeds.");
     return true;
    }
