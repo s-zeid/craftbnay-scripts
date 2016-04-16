@@ -96,7 +96,7 @@ function onCommand(sender, command, label, args) {
    "pass";
   } else if (["?"].indexOf(multiplierString.toLowerCase()) > -1) {
    multiplier = null;
-  } else if (multiplierString.match(/^[-+]?[0-9]+(\.[0-9]+)?$/)) {
+  } else if (multiplierString.match(/^[-+]?[0-9]+(\.([0-9]+)?)?$/)) {
    multiplier = new Float(multiplierString);
    if (Math.abs(multiplier) == Infinity) {
     sendTo.sendMessage("Overflow error.");
