@@ -4,6 +4,8 @@ var USAGE = "/<command> [<selector>] [<multiplier>|?]";
 var DESCRIPTION = "Gets or sets a minecart's speed. "
                 + " Selectors may match minecarts directly or the entities"
                 + " riding them. "
+                + " To use a target selector from a command block, escape"
+                + " the at sign with a backslash (i.e. `\\@...`). "
                 + " If no selector is given, then the minecart that the"
                 + " player is currently riding will be used. "
                 + " If no multiplier is given (or if `?` is given), then"
